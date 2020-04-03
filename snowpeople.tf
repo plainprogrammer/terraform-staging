@@ -32,3 +32,11 @@ module "database" {
   environment = local.environment
   subnet_ids  = module.network.database_subnet_ids
 }
+
+module "elasticsearch" {
+  source = "./modules/elasticsearch"
+
+  team        = local.team
+  environment = local.environment
+  subnet_ids  = module.network.elasticsearch_subnet_ids
+}

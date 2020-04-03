@@ -48,10 +48,23 @@ resource "aws_subnet" "database-az2" {
   }
 }
 
+resource "aws_subnet" "elasticsearch" {
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = "10.0.3.0/24"
+
+  tags = {
+    Team = var.team
+  }
+}
+
 output "cache_subnet_id" {
   value = aws_subnet.cache.id
 }
 
 output "database_subnet_ids" {
   value = [aws_subnet.database-az1.id, aws_subnet.database-az2.id]
+}
+
+output "elasticsearch_subnet_ids" {
+  value = [aws_subnet.elasticsearch.id]
 }
