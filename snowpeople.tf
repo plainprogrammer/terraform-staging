@@ -11,3 +11,11 @@ module "network" {
   team = "unicode-snowpeople"
   environment = "staging"
 }
+
+module "cache" {
+  source = "./modules/cache"
+
+  team = "unicode-snowpeople"
+  environment = "staging"
+  subnet_id = module.network.cache_subnet_id
+}
