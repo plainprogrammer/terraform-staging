@@ -4,3 +4,10 @@ provider "aws" {
   shared_credentials_file = "~/.aws/config"
   profile = "okta-dev"
 }
+
+module "network" {
+  source = "./modules/network"
+
+  team = "unicode-snowpeople"
+  environment = "staging"
+}
