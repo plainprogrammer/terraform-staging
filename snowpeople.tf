@@ -40,3 +40,12 @@ module "elasticsearch" {
   environment = local.environment
   subnet_ids  = module.network.elasticsearch_subnet_ids
 }
+
+resource "aws_ecs_cluster" "ecs" {
+  name                = "${local.team}-${local.environment}"
+  capacity_providers  = ["FARGATE"]
+
+  tags = {
+    Team = local.team
+  }
+}
