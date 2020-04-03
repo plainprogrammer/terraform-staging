@@ -24,3 +24,11 @@ module "cache" {
   environment = local.environment
   subnet_id   = module.network.cache_subnet_id
 }
+
+module "database" {
+  source = "./modules/database"
+
+  team        = local.team
+  environment = local.environment
+  subnet_ids  = module.network.database_subnet_ids
+}
