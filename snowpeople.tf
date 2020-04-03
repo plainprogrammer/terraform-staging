@@ -5,17 +5,22 @@ provider "aws" {
   profile = "okta-dev"
 }
 
+locals {
+  team        = "unicode-snowpeople"
+  environment = "staging"
+}
+
 module "network" {
   source = "./modules/network"
 
-  team = "unicode-snowpeople"
-  environment = "staging"
+  team        = local.team
+  environment = local.environment
 }
 
 module "cache" {
   source = "./modules/cache"
 
-  team = "unicode-snowpeople"
-  environment = "staging"
-  subnet_id = module.network.cache_subnet_id
+  team        = local.team
+  environment = local.environment
+  subnet_id   = module.network.cache_subnet_id
 }
