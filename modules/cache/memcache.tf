@@ -12,6 +12,7 @@ resource "aws_elasticache_cluster" "memcache" {
   subnet_group_name     = aws_elasticache_subnet_group.cache-subnet.name
 
   tags = {
-    Team = var.team
+    Team        = var.team
+    Environment = var.environment
   }
 }

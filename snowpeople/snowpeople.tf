@@ -11,14 +11,14 @@ locals {
 }
 
 module "network" {
-  source = "./modules/network"
+  source = "../modules/network"
 
   team        = local.team
   environment = local.environment
 }
 
 module "cache" {
-  source = "./modules/cache"
+  source = "../modules/cache"
 
   team        = local.team
   environment = local.environment
@@ -26,7 +26,7 @@ module "cache" {
 }
 
 module "database" {
-  source = "./modules/database"
+  source = "../modules/database"
 
   team        = local.team
   environment = local.environment
@@ -34,11 +34,12 @@ module "database" {
 }
 
 module "elasticsearch" {
-  source = "./modules/elasticsearch"
+  source = "../modules/elasticsearch"
 
-  team        = local.team
-  environment = local.environment
-  subnet_ids  = module.network.elasticsearch_subnet_ids
+  team                = local.team
+  environment         = local.environment
+  subnet_ids          = module.network.elasticsearch_subnet_ids
+  security_group_ids  = module.network.elasticsearch_security_group_ids
 }
 
 resource "aws_ecs_cluster" "ecs" {
@@ -46,6 +47,7 @@ resource "aws_ecs_cluster" "ecs" {
   capacity_providers  = ["FARGATE"]
 
   tags = {
-    Team = local.team
+    Team        = local.team
+    Environment = local.environment
   }
 }

@@ -10,8 +10,9 @@ resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
 
   tags = {
-    Name = "${var.team}-${var.environment}"
-    Team = var.team
+    Name        = "${var.team}-${var.environment}"
+    Team        = var.team
+    Environment = var.environment
   }
 }
 
@@ -24,27 +25,41 @@ resource "aws_subnet" "cache" {
   cidr_block        = "10.0.1.0/24"
 
   tags = {
-    Team = var.team
+    Team        = var.team
+    Environment = var.environment
   }
 }
 
-resource "aws_subnet" "database-az1" {
+resource "aws_subnet" "databases-az1" {
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = "10.0.2.0/25"
+  cidr_block        = "10.0.2.0/26"
   availability_zone = "us-west-2a"
 
   tags = {
-    Team = var.team
+    Team        = var.team
+    Environment = var.environment
   }
 }
 
-resource "aws_subnet" "database-az2" {
+resource "aws_subnet" "databases-az2" {
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = "10.0.2.128/25"
+  cidr_block        = "10.0.2.64/26"
   availability_zone = "us-west-2b"
 
   tags = {
-    Team = var.team
+    Team        = var.team
+    Environment = var.environment
+  }
+}
+
+resource "aws_subnet" "databases-az3" {
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = "10.0.2.128/26"
+  availability_zone = "us-west-2c"
+
+  tags = {
+    Team        = var.team
+    Environment = var.environment
   }
 }
 
@@ -53,7 +68,8 @@ resource "aws_subnet" "elasticsearch" {
   cidr_block        = "10.0.3.0/24"
 
   tags = {
-    Team = var.team
+    Team        = var.team
+    Environment = var.environment
   }
 }
 
@@ -62,7 +78,7 @@ output "cache_subnet_id" {
 }
 
 output "database_subnet_ids" {
-  value = [aws_subnet.database-az1.id, aws_subnet.database-az2.id]
+  value = [aws_subnet.databases-az1.id, aws_subnet.databases-az2.id, aws_subnet.databases-az3.id]
 }
 
 output "elasticsearch_subnet_ids" {
