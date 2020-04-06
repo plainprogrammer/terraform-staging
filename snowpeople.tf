@@ -16,6 +16,68 @@ resource "aws_vpc" vpc {
   }
 }
 
+resource "aws_internet_gateway" "gateway" {
+  vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    Team        = local.team
+    Environment = local.environment
+  }
+}
+
+resource "aws_network_acl" "main" {
+  vpc_id = aws_vpc.vpc.id
+
+  egress {
+    rule_no         = 100
+    action          = "allow"
+    cidr_block      = "0.0.0.0/0"
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    icmp_code       = 0
+    icmp_type       = 0
+    ipv6_cidr_block = ""
+  }
+
+  ingress {
+    rule_no         = 100
+    action          = "allow"
+    cidr_block      = "0.0.0.0/0"
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    icmp_code       = 0
+    icmp_type       = 0
+    ipv6_cidr_block = ""
+  }
+
+  subnet_ids = [
+    aws_subnet.databases-az1.id,
+    aws_subnet.databases-az2.id,
+    aws_subnet.databases-az3.id
+  ]
+
+  tags = {
+    Team        = local.team
+    Environment = local.environment
+  }
+}
+
+resource "aws_route_table" "main" {
+  vpc_id = aws_vpc.vpc.id
+
+  route {
+    cidr_block  = "0.0.0.0/0"
+    gateway_id  = aws_internet_gateway.gateway.id
+  }
+
+  tags = {
+    Team        = local.team
+    Environment = local.environment
+  }
+}
+
 resource "aws_subnet" "databases-az1" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = "10.0.1.0/26"
