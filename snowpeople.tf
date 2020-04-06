@@ -52,3 +52,35 @@ resource "aws_db_instance" "bigmaven" {
     Environment = local.environment
   }
 }
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+
+resource "aws_instance" "bastion" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t2.micro"
+
+  associate_public_ip_address = true
+  subnet_id                   = element(module.network.subnet_ids, 1)
+  user_data                   = file("${path.module}/bastion.user-data")
+  vpc_security_group_ids      = [module.network.bastion-security_group_id]
+
+  tags = {
+    Name        = "${local.team} ${local.environment} Bastion Host"
+    Team        = local.team
+    Environmen  = local.environment
+  }
+}

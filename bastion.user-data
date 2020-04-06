@@ -1,0 +1,9 @@
+#!/bin/bash
+mkdir -p /home/ubuntu/.ssh
+
+cat <<FILE > /home/ubuntu/.ssh/authorized_keys
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOsRqEWMDJ74VJXSS0H09OA+lnsQSi66K2DhhWNgorfp james@mavenlink.com
+FILE
+
+chown ubuntu.ubuntu /home/ubuntu/.ssh/authorized_keys
+chmod 400 /home/ubuntu/.ssh/authorized_keys
