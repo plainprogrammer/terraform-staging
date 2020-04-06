@@ -20,6 +20,18 @@ resource "aws_db_subnet_group" "databases" {
   }
 }
 
+resource "aws_db_parameter_group" "import-mysql57" {
+  name        = "import-mysql57"
+  description = "Custom parameters for supporting large imports, like backup restoration."
+  family      = "mysql5.7"
+
+  parameter {
+    apply_method = "immediate"
+    name         = "max_allowed_packet"
+    value        = "1073741824" # Maximum Value
+  }
+}
+
 resource "aws_db_instance" "bigmaven" {
   identifier              = "${local.team_id}-${lower(local.environment)}-db"
   engine                  = "mysql"
