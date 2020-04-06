@@ -1,2 +1,5 @@
 # Terraform local cache
 /.terraform/
+
+# Terraform local state
+/*.tfstate
