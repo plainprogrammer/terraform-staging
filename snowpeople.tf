@@ -93,6 +93,26 @@ resource "aws_instance" "bastion" {
   tags = {
     Name        = "${local.team} ${local.environment} Bastion Host"
     Team        = local.team
-    Environmen  = local.environment
+    Environment  = local.environment
+  }
+}
+
+resource "aws_ecr_repository" "snowpeople-app" {
+  name                 = "snowpeople-staging-app"
+  image_tag_mutability = "MUTABLE"
+
+  tags = {
+    Team        = local.team
+    Environment = local.environment
+  }
+}
+
+resource "aws_ecr_repository" "snowpeople-web" {
+  name                 = "snowpeople-staging-web"
+  image_tag_mutability = "MUTABLE"
+
+  tags = {
+    Team        = local.team
+    Environment = local.environment
   }
 }
